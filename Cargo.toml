@@ -1,0 +1,29 @@
+[package]
+name = "hasky"
+version = "0.1.0"
+edition = "2021"
+authors = ["Arghyadip Chakraborty <arghyadip.chak16@gmail.com>"]
+description = "Haskell grading module for Moody"
+homepage = "https://github.com/arghyadipchak/hasky"
+repository = "https://github.com/arghyadipchak/hasky"
+license = "MIT"
+keywords = ["moodle", "cli", "haskell"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+clap = { version = "4.5.4", features = ["derive"] }
+indicatif = "0.17.8"
+lazy_static = "1.4.0"
+regex = "1.10.4"
+serde = { version = "1.0.199", features = ["derive"] }
+serde_yaml = "0.9.34"
+tempfile = "3.10.1"
+thiserror = "1.0.59"
+threadpool = "1.8.1"
+wait-timeout = "0.2.0"
+
+[profile.release]
+codegen-units = 1
+lto = true
+panic = "abort"
+strip = true
