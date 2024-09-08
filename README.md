@@ -5,16 +5,26 @@
 Hasky is a Haskell grading module for [Moody](https://github.com/arghyadipchak/moody)
 
 ```sh
-Usage: hasky [OPTIONS] --file <FILE> --test-cases <TEST_CASES>
+Usage: hasky [OPTIONS] --input-file <INPUT_FILE> --test-cases <TEST_CASES>
 
 Options:
-  -f, --file <FILE>
+  -i, --input-file <INPUT_FILE>
+          Input file (moody compatible)
   -o, --output-file <OUTPUT_FILE>
+          Output file [default: {input-file}_graded.yml]
   -m, --max-grade <MAX_GRADE>
-  -g, --no-grade
-  -u, --test-functions <TEST_FUNCTIONS>
+          Maximum grade (equally divided among testcases) [default: assignment max grade]
+  -n, --not-graded
+          Don't mark as graded
+  -f, --test-functions <TEST_FUNCTIONS>
+          File containing testcases helper functions
   -c, --test-cases <TEST_CASES>
+          File containing testcases
   -t, --timeout <TIMEOUT>
-  -w, --workers <WORKERS>                [default: 1]
-  -h, --help                             Print help
+          Timeout for each test case (in secs)
+  -w, --workers <WORKERS>
+          No of workers to run [default: 1]
+  -h, --help
+          Print help
+
 ```
