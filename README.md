@@ -15,7 +15,7 @@ Options:
   -m, --max-grade <MAX_GRADE>
           Maximum grade (equally divided among testcases) [default: assignment max grade]
   -n, --not-graded
-          Don't mark as graded
+          Do not mark as graded
   -f, --test-functions <TEST_FUNCTIONS>
           File containing testcases helper functions
   -c, --test-cases <TEST_CASES>
