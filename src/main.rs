@@ -4,7 +4,7 @@ mod code;
 use std::{
   collections::HashMap,
   fmt,
-  fs::{self, File},
+  fs::File,
   io::Write,
   path::PathBuf,
   process,
@@ -70,27 +70,16 @@ impl Status {
 
 fn main() {
   let cli = Cli::parse();
+  let bar = ProgressBar::new(0);
 
   let mut assignment =
     unwrap_or_exit(serde_yaml::from_reader::<_, Assignment>(unwrap_or_exit(
-      File::open(&cli.file),
+      File::open(&cli.input_file),
     )));
 
-  let test_cases = fs::read_to_string(cli.test_cases)
-    .unwrap_or_default()
-    .lines()
-    .map(str::trim)
-    .filter(|t| !(t.is_empty() || t.starts_with("--")))
-    .map(|s| Arc::new(s.to_string()))
-    .collect::<Vec<_>>();
+  let test_cases = cli.get_testcases();
   let n = test_cases.len();
-
-  let bar = ProgressBar::new(0);
-  let test_functions = Arc::new(
-    cli
-      .test_functions
-      .map_or(String::new(), |p| fs::read_to_string(p).unwrap_or_default()),
-  );
+  let test_functions = cli.get_test_functions();
 
   let mut user_test_cases = HashMap::new();
   let pool = ThreadPool::new(cli.workers);
@@ -156,14 +145,11 @@ fn main() {
       submission.grade +=
         (passed as f32 * max_grade * 100.0 / n as f32).round() / 100.0;
 
-      if !cli.no_grade {
-        submission.graded = true;
-      }
+      submission.graded = !cli.not_graded;
     }
   }
 
-  let mut fh =
-    unwrap_or_exit(File::create(cli.output_file.unwrap_or(cli.file)));
+  let mut fh = unwrap_or_exit(File::create(cli.get_output_file()));
 
   unwrap_or_exit(writeln!(fh, "{HASKY_DISCLAIMER}\n"));
   unwrap_or_exit(serde_yaml::to_writer(fh, &assignment));
