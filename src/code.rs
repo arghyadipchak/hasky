@@ -26,19 +26,17 @@ impl Code {
   where
     P: AsRef<Path>,
   {
-    let mut source_codes = Vec::new();
-    for file in files {
-      let content = fs::read_to_string(file).unwrap_or_default();
+    let source_codes = files
+      .into_iter()
+      .filter_map(|file| {
+        let content = fs::read_to_string(file).unwrap_or_default();
 
-      let content = MODULE_REGEX.replace_all(&content, "");
-      let content = MAIN_REGEX.replace_all(&content, "");
+        let content = MODULE_REGEX.replace_all(&content, "");
+        let content = MAIN_REGEX.replace_all(&content, "");
 
-      if content.is_empty() {
-        continue;
-      }
-
-      source_codes.push(content.to_string());
-    }
+        (!content.is_empty()).then(|| content.to_string()) // Shorter version
+      })
+      .collect();
 
     Self { source_codes }
   }
